@@ -5,8 +5,8 @@ nix-build https://github.com/andrewbaxter/organixm/archive/master.tar.gz \
 	--argstr version_region $UPLOAD_REGION \
 	--argstr version_bucket $UPLOAD_BUCKET \
 	--argstr version_object_path gears \
-	--argstr version_ro_access_key $UPLOAD_ACCESS_KEY \
-	--argstr version_ro_secret_key $UPLOAD_SECRET_KEY \
+	--argstr version_ro_access_key $DOWNLOAD_ACCESS_KEY \
+	--argstr version_ro_secret_key $DOWNLOAD_SECRET_KEY \
 	--argstr version_success_unit user-kiosk.service \
 	--arg version_max_size 10 \
 	"$@"
