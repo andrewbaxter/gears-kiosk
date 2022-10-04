@@ -1,6 +1,6 @@
 #!/bin/sh -eux
 nix-build https://github.com/andrewbaxter/organixm/archive/master.tar.gz \
-	-I nixpkgs=channel:nixos-22.11 \
+	-I nixpkgs=channel:nixos-22.05 \
 	--arg version_config ./gears.nix \
 	--argstr version_uuid $(cat uuid.txt) \
 	--argstr version_region $UPLOAD_REGION \
