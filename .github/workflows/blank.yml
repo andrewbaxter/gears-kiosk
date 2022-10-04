@@ -1,12 +1,26 @@
+---
 name: CI
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-  workflow_dispatch:
+    branches:
+      - master
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          base: ${{ github.ref }}
+          filters: |
+            uuid:
+              - uuid.txt
+    outputs:
+      uuid: ${{ steps.filter.outputs.uuid }}
   build:
+    needs: changes
+    if: ${{ needs.changes.outputs.uuid == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

@@ -1,7 +1,7 @@
 #!/bin/sh
 nix-build https://github.com/andrewbaxter/organixm/archive/master.tar.gz \
 	--arg version_config ./gears.nix \
-	--argstr version_uuid 84742f94-db2b-4184-8670-3a3c851309b2 \
+	--argstr version_uuid $(cat uuid.txt) \
 	--argstr version_region $UPLOAD_REGION \
 	--argstr version_bucket $UPLOAD_BUCKET \
 	--argstr version_object_path gears \
