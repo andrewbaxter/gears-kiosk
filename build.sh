@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -eux
 nix-build https://github.com/andrewbaxter/organixm/archive/master.tar.gz \
 	--arg version_config ./gears.nix \
 	--argstr version_uuid $(cat uuid.txt) \
