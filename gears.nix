@@ -31,22 +31,33 @@ in
 
     systemd = {
       extraConfig = joinl [ "DefaultStandardOutput=journal+console" ];
-      user = {
-        targets = {
-          getty = {
-            enabled = false;
-          };
+      targets = {
+        getty = {
+          enable = false;
         };
+      };
+      user = {
         services = {
           "user-i3" = {
             wantedBy = [ "default.target" ];
-            after = [ "organixm-update.service" ];
             description = "desktop";
             unitConfig = {
               ConditionUser = "1000";
             };
             serviceConfig = {
               Type = "simple";
+              TimeoutSec = "60m";
+              ExecStartPre = pkgs.writeShellScript "wait-for-update" ''
+                while true;
+                do
+                  if [[ $(systemctl show -P SubState organixm-update.service) = "dead" ]];
+                  then
+                    break;
+                  fi
+                  sleep 1
+                done
+                sleep 10
+              '';
               ExecStart =
                 let
                   config = joinl [
