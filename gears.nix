@@ -32,14 +32,15 @@ in
     systemd = {
       extraConfig = joinl [ "DefaultStandardOutput=journal+console" ];
       user = {
-        #targets = {
-        #  getty = {
-        #    enabled = false;
-        #  };
-        #};
+        targets = {
+          getty = {
+            enabled = false;
+          };
+        };
         services = {
           "user-i3" = {
             wantedBy = [ "default.target" ];
+            after = [ "organixm-update.service" ];
             description = "desktop";
             unitConfig = {
               ConditionUser = "1000";
