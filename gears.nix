@@ -48,12 +48,9 @@ in
               Type = "simple";
               TimeoutSec = "60m";
               ExecStartPre = pkgs.writeShellScript "wait-for-update" ''
-                while true;
+                set -xeu
+                while [[ $(${pkgs.systemd}/bin/systemctl show -P SubState organixm-update.service) = "dead" ]]
                 do
-                  if [[ $(systemctl show -P SubState organixm-update.service) = "dead" ]];
-                  then
-                    break;
-                  fi
                   sleep 1
                 done
                 sleep 10
