@@ -13,9 +13,6 @@ in
           uid = 1000;
           extraGroups = [ "input" "video" "audio" "tty" ];
         };
-        root = {
-          initialPassword = "x";
-        };
       };
     };
 
@@ -47,7 +44,6 @@ in
               Type = "simple";
               TimeoutSec = "60m";
               ExecStartPre = pkgs.writeShellScript "wait-for-update" ''
-                set -xeu
                 while ! (${pkgs.systemd}/bin/systemctl show -P SubState organixm-update.service | grep -q "^\\(failed\\|exited\\)$")
                 do
                   sleep 10
