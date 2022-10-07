@@ -30,7 +30,6 @@ in
     };
 
     systemd = {
-      extraConfig = joinl [ "DefaultStandardOutput=journal+console" ];
       targets = {
         getty = {
           enable = false;
@@ -49,11 +48,11 @@ in
               TimeoutSec = "60m";
               ExecStartPre = pkgs.writeShellScript "wait-for-update" ''
                 set -xeu
-                while [[ $(${pkgs.systemd}/bin/systemctl show -P SubState organixm-update.service) = "dead" ]]
+                while ! (${pkgs.systemd}/bin/systemctl show -P SubState organixm-update.service | grep -q "^\\(failed\\|exited\\)$")
                 do
-                  sleep 1
+                  sleep 10
                 done
-                sleep 10
+                sleep 30
               '';
               ExecStart =
                 let
@@ -70,7 +69,8 @@ in
           };
           "user-kiosk" = {
             wantedBy = [ "default.target" ];
-            requires = [ "user-i3.service" ];
+            bindsTo = [ "user-i3.service" ];
+            after = [ "user-i3.service" ];
             description = "user-kiosk";
             unitConfig = {
               ConditionUser = "1000";
@@ -88,7 +88,7 @@ in
     };
     services = {
       journald = {
-        extraConfig = joinl [ "Storage=volatile" ];
+        console = "/dev/console";
       };
       pipewire = {
         enable = true;
